@@ -1,0 +1,15 @@
+# ignore all these files:
+
+# files specific to dev environment:
+
+.vscode
+.env
+bot-env
+
+# log files:
+
+*.log
+
+# idk?
+
+**/__pycache__
