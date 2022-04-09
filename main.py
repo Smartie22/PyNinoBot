@@ -42,6 +42,7 @@ cog_files = [f'{cog_path}.rps',
              f'{cog_path}.ping',
              f'{cog_path}.echo',
              f'{cog_path}.say',
+             f'{cog_path}.rise'
             ]
 
 
@@ -51,8 +52,10 @@ async def on_ready():
     for guild in bot.guilds:
         print(f'{bot.user.name.upper()} FINALLY LANDED ON {str(guild).upper()}!!')
 
-bot.run(TOKEN) # runs the code using the bot account through the token
+ # runs the code using the bot account through the token
 
 if __name__ == "__main__":
     for cog_file in cog_files:
         bot.load_extension(cog_file)
+        
+bot.run(TOKEN)

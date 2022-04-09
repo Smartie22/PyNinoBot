@@ -28,7 +28,7 @@ class Reload(commands.Cog):
         try:
             self.bot.reload_extension(f'{path}.{file}')
             return await ctx.send(f"{file} has been reloaded.")
-        except:
+        except Exception:
             return await ctx.send(f"There was a problem and {file} has not been reloaded.")
 
 def setup(bot):

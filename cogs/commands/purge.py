@@ -28,7 +28,7 @@ class Purge(commands.Cog):
                 return await ctx.send("That's too many messages at once!")
             print(f'{number_of_messages} message(s) deleted from {ctx.channel}')
             await ctx.channel.purge(limit=number_of_messages + 1, check=lambda msg: not msg.pinned)
-        except:
+        except Exception:
             await ctx.send("You can't use that!")
 
 def setup(bot):
