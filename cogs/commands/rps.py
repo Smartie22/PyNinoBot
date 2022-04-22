@@ -21,7 +21,7 @@ class RPS(commands.Cog):
         user_score = 0
         again = True
         if input == ():
-            await ctx.send("Oh, You wanna play me in Rock, Paper, Scissors? \nAlright")
+            await ctx.send(f"Oh {str(ctx.author)[:-5]}, You wanna play against me in Rock, Paper, Scissors? \nAlright")
             while again:
                 await ctx.send("What're you gonna choose?")
 
