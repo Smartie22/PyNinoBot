@@ -15,7 +15,7 @@ class Purge(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='purge')
+    @commands.command(name='purge', hidden=True)
     @commands.is_owner()
     async def purge_messsages(self, ctx: commands.Context, number_of_messages: int =1):
         """

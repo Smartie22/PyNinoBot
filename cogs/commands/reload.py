@@ -16,20 +16,20 @@ class Reload(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='reload')
+    @commands.command(name='reload', hidden=True)
     @commands.is_owner()
     async def reload_commands(self, ctx: commands.Context, file: str, path: str = 'cogs.commands'):
         """
         Reloads file using path to apply the most recent changes to the module
-        wihtout affecting the runtime of the bot. path defaults to cogs.commands
+        wihtout affecting the runtime of the bot. Path defaults to cogs.commands
         if not provided
         usage: .reload <file: str> <path: str>
         """
         try:
             self.bot.reload_extension(f'{path}.{file}')
-            return await ctx.send(f"{file} has been reloaded.")
+            return await ctx.send(f"`{file}` has been reloaded.")
         except Exception:
-            return await ctx.send(f"There was a problem and {file} has not been reloaded.")
+            return await ctx.send(f"There was a problem and `{file}` has not been reloaded.")
 
 def setup(bot):
     bot.add_cog(Reload(bot))

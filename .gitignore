@@ -6,6 +6,8 @@
 .env
 bot-env
 
+sql_queries.py
+
 # log files:
 
 *.log
@@ -13,3 +15,7 @@ bot-env
 # idk?
 
 **/__pycache__
+
+# local database
+
+main.db
