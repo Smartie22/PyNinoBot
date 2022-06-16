@@ -16,6 +16,7 @@ class CustomCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
+
     @commands.group(name='custom', aliases=('c', 'my'), invoke_without_command=True)
     async def custom(self, ctx: commands.Context, command: str | None = None):
         """
@@ -67,7 +68,7 @@ class CustomCommands(commands.Cog):
                     await db.commit()
                     await ctx.send(f'the command `{command}` has been added successfully!')
                 else:
-                    await ctx.send('Nice empty command. Bet that\'ll be useful.')
+                    await ctx.send("Nice empty command. Bet that'll be useful.")
 
 
     @custom.command(name='delete', aliases=('remove', 'del'))
@@ -82,6 +83,7 @@ class CustomCommands(commands.Cog):
                     await ctx.send(f'The command `{command}` has been deleted successfully! ...if it existed and is yours.')
         else:
             await ctx.send("you didn't tell me what to delete :|")
+
     
     @custom.command(name= 'privacy', aliases=('priv', 'toggle'))
     async def toggle_privacy(self, ctx:commands.Context, command: str | None = None):
@@ -125,6 +127,49 @@ class CustomCommands(commands.Cog):
                             await ctx.send(f'The command `{result[0]}` has been toggled to private.')
                     else:
                         await ctx.send('There is no such command...')
+
+
+    @custom.command(name='rename')
+    async def rename(self, ctx:commands.Context, command: str | None = None, name: str | None = None):
+        if command and name:
+            d = {'userid': ctx.author.id, 'command': command, 'name': name}
+            async with connect('main.db') as db:
+                async with db.cursor() as c:
+                    await c.execute('''SELECT command FROM CustomCommands WHERE userid = :userid AND command = :command 
+                                 AND ROWID = (SELECT MAX(ROWID) FROM CustomCommands WHERE command = :command and userid = :userid)''', d)
+                    result = await c.fetchone()
+                    if result:
+                        await c.execute('''UPDATE CustomCommands SET command = :name WHERE command = :command AND userid = :userid
+                                    AND ROWID = (SELECT MAX(ROWID) FROM CustomCommands WHERE command = :command and userid = :userid)''', d)
+                        await db.commit()
+                        await ctx.send(f'The command `{command}` has been renamed to `{name}`.')
+                    else:
+                        await ctx.send('There is no such command...')
+        else:
+            await ctx.send('You need to pass two arguments :|')
+
+    
+    @custom.command(name='update')
+    async def update(self, ctx:commands.Context, command: str | None = None, *content):
+        d = {'userid': ctx.author.id, 'command': command, 'content': ' '.join(content)}
+        if not command:
+            await ctx.send("Can't update nothing so try giving an actual command next time.")
+        elif content:
+            async with connect('main.db') as db:
+                async with db.cursor() as c:
+                    await c.execute('''SELECT content FROM CustomCommands WHERE userid = :userid AND command = :command 
+                                AND ROWID = (SELECT MAX(ROWID) FROM CustomCommands WHERE command = :command and userid = :userid)''', d)
+                    result = await c.fetchone()
+                    if result:
+                        await c.execute('''UPDATE CustomCommands SET content = :content WHERE command = :command AND userid = :userid
+                                    AND ROWID = (SELECT MAX(ROWID) FROM CustomCommands WHERE command = :command and userid = :userid)''', d)
+                        await db.commit()
+                        await ctx.send(f'The command `{command}` has been updated.')
+                    else:
+                        await ctx.send('There is no such command...')
+        else:
+            await ctx.send("Nice empty command. Bet that'll be useful.")
+
 
 def setup(bot):
     bot.add_cog(CustomCommands(bot))
