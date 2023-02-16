@@ -24,18 +24,19 @@ logger.addHandler(handler)
 
 # sets up the intents to be used by the bot
 intents = Intents.default()
+intents.message_content = True
 intents.guild_messages = True
 intents.members = True
+intents.voice_states = True
 intents.typing = False
 intents.presences = False
 
 # load the environmental variables from .env
 load_dotenv()
 TOKEN = os.getenv('NINO_TOKEN')
-GUILD = os.getenv('GUILD')
 OWNER = int(os.getenv('OWNER'))
-CHANNEL = os.getenv('CHANNEL')
 
+# initializing the bot client and commands
 bot = commands.Bot(command_prefix=('.', '!'), owner_id=OWNER, case_insensitive=True, strip_after_prefix=True, intents=intents)
 cog_path = 'cogs.commands'
 cog_files = [f'{cog_path}.rps',
@@ -46,6 +47,7 @@ cog_files = [f'{cog_path}.rps',
              f'{cog_path}.say',
              f'{cog_path}.rise',
              f'{cog_path}.custom_commands',
+             f'{cog_path}.music',
             ]
 
 
@@ -64,7 +66,7 @@ async def on_ready():
     #                 except Exception:
     #                     await c.execute('UPDATE Users SET username = :username WHERE userid = :userid', d)
     #                 await db.commit()
-    #                 del d
+    #                 del d 
     #                 await sleep(0)
                 await sleep(0)
         
