@@ -8,9 +8,12 @@ from aiosqlite import connect
 
 from discord.ext import commands
 
-class CustomCommands(commands.Cog):
+class CustomCommands(commands.Cog, name='custom commands'):
     """
-    This class handles all commands for custom commands
+    This lets you set up your very own customizable commands!
+    Just tell me what response you want to link to that command and voila!
+    You can even make them public so other people can use them too!
+    I'm tired of using exclamation marks to induce excitement so just get on with it already and see for yourself. Jeesh.
     """
 
     def __init__(self, bot):
@@ -20,7 +23,13 @@ class CustomCommands(commands.Cog):
     @commands.group(name='custom', aliases=('c', 'my'), invoke_without_command=True)
     async def custom(self, ctx: commands.Context, command: str | None = None):
         """
-        Set your very own commands!
+        Invoke your custom command anytime! Or look up all your commands in case your `[redacted]` head can't remember them all.
+        That's why I'm here though so all good.
+
+        Usage: 
+        `.custom` to view all your commands.
+        `.custom [command]` to invoke a command.
+        Aliases: `c`, `my`
         """
         async with connect('main.db') as db:
             if command:
@@ -58,10 +67,16 @@ class CustomCommands(commands.Cog):
 
     @custom.command(name='add')
     async def add_custom(self, ctx:commands.Context, command: str | None = None, *args):
+        """
+        Add a new custom command to your name!
+
+        Usage: 
+        `.custom add [command] [response...]` to add a command.
+        """
         async with connect('main.db') as db:
             async with db.cursor() as c:
                 if not command:
-                    await ctx.send('What are you expecting me to add? Your girlfriend?')
+                    await ctx.send('What are you expecting me to add? Your girlfriend? Oh wait...')
                 elif args:
                     d = {'userid': ctx.author.id, 'username': ctx.author.name, 'command': command, 'content': ' '.join(args)}
                     await c.execute(f'INSERT INTO CustomCommands VALUES (:userid, :username, :command, 1, :content)', d)
@@ -73,6 +88,13 @@ class CustomCommands(commands.Cog):
 
     @custom.command(name='delete', aliases=('remove', 'del'))
     async def delete_custom(self, ctx:commands.Context, command: str | None = None):
+        """
+        Remove one of your commands in case you finally realized how terrible it truly was.
+
+        Usage: 
+        `.custom delete [command]` to delete a command.
+        Aliases: `remove`, `del`
+        """
         if command:
             async with connect('main.db') as db:
                 async with db.cursor() as c:
@@ -80,13 +102,20 @@ class CustomCommands(commands.Cog):
                     await c.execute('''DELETE FROM CustomCommands WHERE userid = :userid AND command = :command 
                                        AND ROWID = (SELECT MAX(ROWID) FROM CustomCommands WHERE command = :command and userid = :userid)''', d)
                     await db.commit()
-                    await ctx.send(f'The command `{command}` has been deleted successfully! ...if it existed and is yours.')
+                    await ctx.send(f'The command `{command}` has been deleted successfully! ...if it existed and is yours. Kinda too lazy to check tbf.')
         else:
             await ctx.send("you didn't tell me what to delete :|")
 
     
     @custom.command(name= 'privacy', aliases=('priv', 'toggle'))
     async def toggle_privacy(self, ctx:commands.Context, command: str | None = None):
+        """
+        Toggle the privacy of your command to let other people use it or keep it to yourself like some weirdo command goblin.
+
+        Usage: 
+        `.custom privacy [command]` to toggle the privacy of a command.
+        Aliases: `priv`, `toggle`
+        """
         if command:
             d = {'userid': ctx.author.id, 'command': command}
             async with connect('main.db') as db:
@@ -131,6 +160,11 @@ class CustomCommands(commands.Cog):
 
     @custom.command(name='rename')
     async def rename(self, ctx:commands.Context, command: str | None = None, name: str | None = None):
+        """
+        Rename a command. That's it.
+        Usage: 
+        `.custom [command] [new_name]` to rename the command.
+        """
         if command and name:
             d = {'userid': ctx.author.id, 'command': command, 'name': name}
             async with connect('main.db') as db:
@@ -146,11 +180,16 @@ class CustomCommands(commands.Cog):
                     else:
                         await ctx.send('There is no such command...')
         else:
-            await ctx.send('You need to pass two arguments :|')
+            await ctx.send('You need to pass two names :|')
 
     
     @custom.command(name='update')
     async def update(self, ctx:commands.Context, command: str | None = None, *content):
+        """
+        Update the content of the custom command in case you messed up like you always do.
+        Usage: 
+        `.custom [commant] [new_response...]` to update the command.
+        """
         d = {'userid': ctx.author.id, 'command': command, 'content': ' '.join(content)}
         if not command:
             await ctx.send("Can't update nothing so try giving an actual command next time.")

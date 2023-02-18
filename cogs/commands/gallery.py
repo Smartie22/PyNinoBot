@@ -10,14 +10,14 @@ from discord.ui import Button, View
 from discord.ext import commands
 from random import choice
 
-class Rise(commands.Cog):
+class GalleryCog(commands.Cog, name='gallery'):
     """
-    This class handles the main behaviour for the command 'rise'
+    Lets me show you a very cool, epic and cute collection of the topest of top tier art, which I have personally curated!
     """
 
     def __init__(self, bot):
         self.bot = bot
-        self.links = [
+        self._rise = [
             'https://media.discordapp.net/attachments/835327750809452564/962404161532608592/1648666263091.jpg?width=453&height=670',
             'https://media.discordapp.net/attachments/835327750809452564/962404161285140530/IMG_20220403_033949.jpg?width=446&height=671',
             'https://media.discordapp.net/attachments/835327750809452564/962404160987365376/1649451311082.jpg?width=474&height=670',
@@ -27,23 +27,36 @@ class Rise(commands.Cog):
         ]
         self.sent = []
 
-    @commands.command(name='rise')
+    @commands.group(name='gallery', invoke_without_command=True)
+    async def gallery(self, ctx:commands.Context):
+        """
+        Shows all characters who have their own art gallery.
+
+        Usage: 
+        `.gallery` to list the galleries.
+        """
+        g = ['`Rise Kujikawa`']
+        return await ctx.send("Here are the available galleries : " + ', '.join(g))
+
+    @gallery.command(name='rise')
     async def rise(self, ctx: commands.Context):
         """
-        Sends back a random link for a Rise Post
-        usage: .rise
+        Sends the art gallery for Rise Kujikawa (even I admit that she's top tier)
+
+        Usage: 
+        `.gallery rise` to show Rise's Gallery.
         """
         async def _pick_link():
 
-            link = choice(self.links)
+            link = choice(self._rise)
 
             while link in self.sent:
-                link = choice(self.links)
-                await asyncio.sleep(0)  # allows event loop to take back control temporarily
+                link = choice(self._rise)
+                await asyncio.sleep(0)  # allows main event loop to keep going
 
             self.sent.append(link)
 
-            if len(self.sent) == len(self.links):
+            if len(self.sent) == len(self._rise):
                 self.sent = []
                 self.sent.append(link)
 
@@ -61,4 +74,4 @@ class Rise(commands.Cog):
         await ctx.send(embed=embed, view=view)
 
 def setup(bot):
-    bot.add_cog(Rise(bot))
+    bot.add_cog(GalleryCog(bot))

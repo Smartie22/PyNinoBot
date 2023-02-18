@@ -7,15 +7,33 @@ import random
 import asyncio
 from discord.ext import commands
 
-class RPS(commands.Cog):
+class GameCog(commands.Cog, name='games'):
     """
-    This class handles the rock paper scissors minigame
+    These are some minigames you can play! They're nothing too grand but still cool. More are probably on the way.
     """
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='rps')
+    @commands.group(name='games', aliases=['game'], invoke_without_command=True)
+    async def games(self, ctx: commands.Context):
+        """
+        Shows you all my available minigames.
+        Usage: 
+        `.games` to display all games.
+        Alias: `game`
+        """
+        g = ['`rps`',]
+        return await ctx.send("These are all the games you can play: " + ', '.join(g))
+
+
+    @games.command(name='rps')
     async def rps(self, ctx: commands.Context, *input):
+        """
+        Lets you play Rock, Paper, Scissors against me!
+
+        Usage: 
+        `.games rps` to play.
+        """
         rps_choices = ('rock', 'paper', 'scissors')
         bot_score = 0
         user_score = 0
@@ -72,7 +90,7 @@ class RPS(commands.Cog):
                 except asyncio.TimeoutError:
                     await ctx.send('Rock, Paper, Scissors timed out')
 
-                if again in ('yes', 'y'):
+                if again in ('yes', 'y', 'sure', 'yer'):
                     again = True
                 else:
                     again = False
@@ -84,4 +102,4 @@ class RPS(commands.Cog):
                         await ctx.send(f"Alright!\nMy score was {bot_score} and yours was {user_score}\nJust know I won't lose to you again!")
 
 def setup(bot):
-    bot.add_cog(RPS(bot))
+    bot.add_cog(GameCog(bot))

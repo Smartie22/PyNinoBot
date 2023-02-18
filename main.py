@@ -38,18 +38,6 @@ OWNER = int(os.getenv('OWNER'))
 
 # initializing the bot client and commands
 bot = commands.Bot(command_prefix=('.', '!'), owner_id=OWNER, case_insensitive=True, strip_after_prefix=True, intents=intents)
-cog_path = 'cogs.commands'
-cog_files = [f'{cog_path}.rps',
-             f'{cog_path}.reload',
-             f'{cog_path}.purge',
-             f'{cog_path}.ping',
-             f'{cog_path}.echo',
-             f'{cog_path}.say',
-             f'{cog_path}.rise',
-             f'{cog_path}.custom_commands',
-             f'{cog_path}.music',
-            ]
-
 
 @bot.event
 async def on_ready():
@@ -74,8 +62,8 @@ async def on_ready():
  # runs the code using the bot account through the token
 
 if __name__ == "__main__":
-    for cog_file in cog_files:
-        bot.load_extension(cog_file)
-        print(f'{cog_file} has been loaded')
-        
+    # for cog_file in cog_files:
+    cogs = bot.load_extension('cogs', recursive=True, store=False)
+    print(' loaded \n'.join(cogs) + ' loaded')
+
 bot.run(TOKEN)
