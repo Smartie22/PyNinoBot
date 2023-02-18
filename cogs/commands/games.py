@@ -1,5 +1,5 @@
 """
-This module is dedicated for the Rock Paper Scissors game command system
+This module is dedicated for the Games command system
 Creation date: 04/11/2021
 """
 

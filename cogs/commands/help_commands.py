@@ -1,6 +1,6 @@
 """
 This module is dedicated to the help commands
-Creation Date: 15/01/2023
+Creation Date: 15/02/2023
 """
 from typing import Set
 from discord import Embed

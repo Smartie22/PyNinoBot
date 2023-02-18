@@ -1,6 +1,6 @@
 """
-This module is dedicated for the command 'rise' which sends
-back a random Very Based Rise pic/gif
+This module is dedicated for the gallery command which sends
+back an embed for an art gallery of a character.
 Creation Date: 09/04/2022
 """
 
