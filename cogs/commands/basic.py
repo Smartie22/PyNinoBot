@@ -6,6 +6,7 @@ Creation Date: 16/02/2023
 import time
 
 from discord.ext import commands
+from yt_dlp import YoutubeDL
 
 
 class BasicCog(commands.Cog, name='basic'):
@@ -50,7 +51,7 @@ class BasicCog(commands.Cog, name='basic'):
         Slightly more useful and much funnier than echo.
 
         Usage: 
-        `.send [something...]` to send something
+        `.send [something...]` to send something.
         """
         if arg:
             await ctx.send(arg)
@@ -58,6 +59,20 @@ class BasicCog(commands.Cog, name='basic'):
         else:
             return await ctx.send("You didn't tell me anything to say.")
 
+    @commands.command(name='search')
+    
+    async def search_yt(self, ctx: commands.Context, *, search: str = ''):
+        """
+        Search for a video on Youtube! Useful for when you just wanna link a video quickly.
+
+        Usage:
+        `.search [search...]` to search.
+        """
+        if not search:
+            return await ctx.send("An empty search is surely not what you wanted so actually tell me what to search for next time.")
+        with YoutubeDL() as ydl:
+            video = ydl.extract_info(f'ytsearch:{search}', download=False)['entries'][0]
+            return await ctx.send(video['webpage_url'])
 
 
 def setup(bot):
