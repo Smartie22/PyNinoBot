@@ -22,7 +22,7 @@ class MusicCog(commands.Cog, name='music'):
 
         logger = logging.getLogger('ydl')
         logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler(filename='ydl.log', encoding='utf-8', mode='w')
+        handler = logging.FileHandler(filename='musicydl.log', encoding='utf-8', mode='w')
         handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
         logger.addHandler(handler)
 

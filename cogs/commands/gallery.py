@@ -41,7 +41,7 @@ class GalleryCog(commands.Cog, name='gallery'):
     @gallery.command(name='rise')
     async def rise(self, ctx: commands.Context):
         """
-        Sends the art gallery for Rise Kujikawa (even I admit that she's top tier)
+        Sends the art gallery for Rise Kujikawa!
 
         Usage: 
         `.gallery rise` to show Rise's Gallery.
